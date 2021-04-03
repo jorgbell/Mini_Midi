@@ -21,7 +21,7 @@ def noise(dur,vol):
     return vol*(2.0*np.random.random(int(SRATE*dur))-1.0)
 '''
 def oscCuad(frec, dur, vol):
-    return vol*(2*np.floor(np.sin(2*np.pi*np.arange(int(SRATE*dur))*frec/SRATE))+1)  
+    return vol*(2*np.floor(np.sin(2*np.pi*np.arange(int(SRATE*dur))*frec/SRATE))+1)
 def oscSierra(frec, dur, vol):
     return vol*(2*((np.arange(int(SRATE*dur)) % (SRATE/frec)) * frec/SRATE)-1)
 last = 0
