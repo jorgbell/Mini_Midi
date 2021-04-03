@@ -39,10 +39,13 @@ while len(bloque>0):
     bloque = data[ numBloque*CHUNK : numBloque*CHUNK+CHUNK ]
 
     if len(bloque > 0):
-        valor1 = np.max(bloque)
-        valor2 = abs(np.min(bloque))
-        maximo = 32768 / max(valor1, valor2)
-        bloque = bloque * maximo
+        maximo = np.max(bloque)
+        minimo = np.min(bloque)
+        coef = maximo / minimo
+        #maximo = 32768 / max(valor1, valor2)
+        #bloque = bloque * maximo
+        bloque = bloque / coef
+        #bloque = np.clip(bloque,0,max)
 
         """
         valMax = np.max(bloque)
@@ -53,7 +56,6 @@ while len(bloque>0):
         #print(numBloque, ": ", max, min, maximo)
 
         bloque = bloque * maximo
-        #bloque = np.clip(bloque,0,media)
         #bloque = bloque / max
         #bloque = bloque * min
         """
