@@ -71,31 +71,17 @@ stream= p.open(format=TYPE,
 c = ' '
 kb = kbhit.KBHit()
 i=0
-notaPrev=0.0
-silencio = False
 while c!= 'q' and i<len(partitura):
     #reproductor de la partitura
     notaAct= partitura[i][0] #Nota que va a tocar a continuacion
-    durAct=partitura[i][1] #Duración de la nota
-    '''
-    #comprueba si la nota actual es igual a la anterior para meter un pequeño silencio de por medio (porque si no, suena como una sola)
-    if notaAct == notaPrev:
-        silencio = True
-    #A continuación toca la nota correspondiente o en su defecto un pequeño silencio
-    if silencio: #si hay que meter un pequeño silencio
-        samples=osc(notaAct,0.08,0) #mete un pequeño silencio entre ambas
-        silencio = False
-        notaPrev = 0.0
-    else:
-        samples=osc(notaAct, durAct,VOLUMEN) #frecuencia,duracion,volumen
-        notaPrev=notaAct
-        i=i+1
-    '''   
+    durAct=partitura[i][1] #Duración de la nota  
+
     samples=osc(notaAct, durAct,VOLUMEN) #frecuencia,duracion,volumen
     stream.write(samples.astype(np.float32).tobytes())
-    samples=osc(notaAct,0.08,0) #mete un pequeño silencio entre ambas
+    samples=osc(notaAct,0.03,0) #mete un pequeño silencio entre ambas
     stream.write(samples.astype(np.float32).tobytes())
     i=i+1
+    
     if kb.kbhit():
         c = kb.getch()
         if c =='q':
