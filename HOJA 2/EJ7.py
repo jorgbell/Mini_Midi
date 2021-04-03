@@ -26,7 +26,7 @@ def oscChunk(vol):
 
 #EJERCICIO ENTREGABLE 7: PARTITURA HAPPY BIRTHDAY
 #Constantes para la duración de las notas
-NEGRA=1
+NEGRA=0.5
 CORCHEA=NEGRA/2
 BLANCA=NEGRA*2
 #LISTA DE FRECUENCIAS PARA LAS NOTAS
@@ -52,7 +52,15 @@ class FreqTable:
 
 #Lista de pares para la partitura de Happy Birthday
 freqs= FreqTable()
-partitura=[(freqs.G, CORCHEA), (freqs.G, CORCHEA), (freqs.A,NEGRA),(freqs.G, NEGRA)]
+partitura=[(freqs.G, CORCHEA), (freqs.G, CORCHEA), (freqs.A,NEGRA),(freqs.G, NEGRA),
+            (freqs.C*2, NEGRA), (freqs.B, BLANCA),
+            (freqs.G, CORCHEA), (freqs.G, CORCHEA),(freqs.A,NEGRA),(freqs.G, NEGRA),
+            (freqs.D*2,NEGRA),(freqs.C*2, BLANCA),
+            (freqs.G, CORCHEA), (freqs.G, CORCHEA), (freqs.G*2,NEGRA),(freqs.E*2, NEGRA),
+            (freqs.C*2,NEGRA), (freqs.B, NEGRA), (freqs.A, NEGRA),
+            (freqs.F*2, CORCHEA), (freqs.F*2, CORCHEA), (freqs.E*2,NEGRA),(freqs.C*2, NEGRA),
+            (freqs.D*2, NEGRA), (freqs.C*2, BLANCA)]
+            
 
 #comienzo del stream
 stream= p.open(format=TYPE,
