@@ -14,6 +14,9 @@ def getWidthData(data):
     else: raise Exception('Not supported')
 
 
+def setDelay(data, delayTime):
+    delay = np.zeros(int(delayTime * SRATE), dtype=data.dtype)
+    return np.append(delay, data)
 
 # abrimos wav y recogemos frecMuestreo y array de datos
 SRATE, data = wavfile.read(os.path.dirname(__file__) + '\piano.wav')
@@ -30,7 +33,6 @@ print("Len: ",data.shape[0])
 p = pyaudio.PyAudio()
 
 CHUNK = 1024
-DELAY_TIME = 1
 stream = p.open(format=p.get_format_from_width(getWidthData(data)),
                 channels=len(data.shape),
                 rate=SRATE,
@@ -40,9 +42,9 @@ stream = p.open(format=p.get_format_from_width(getWidthData(data)),
 
 # En data tenemos el wav completo, ahora procesamos por bloques (chunks)
 bloque = np.arange(CHUNK,dtype=data.dtype)
-delay = np.zeros(int(DELAY_TIME * SRATE))
 
-data = np.append(delay, data)
+DELAY_TIME = 2
+data = setDelay(data, DELAY_TIME)
 
 numBloque = 0
 kb = kbhit.KBHit()
