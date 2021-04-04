@@ -15,9 +15,9 @@ def getWidthData(data):
     else: raise Exception('Not supported')
 
 last = 0
-def oscChunk(vol):
+def oscChunk(vol, frec):
     global last
-    dataChunk = vol*np.sin(2*np.pi*(np.arange(CHUNK)+last)*FREQ/SRATE)
+    dataChunk = vol*np.sin(2*np.pi*(np.arange(CHUNK)+last)*frec/SRATE)
     last+=CHUNK
     return dataChunk
 
@@ -49,40 +49,72 @@ bloque = np.arange(CHUNK,dtype=data.dtype)
 numBloque = 0
 kb = kbhit.KBHit()
 c= ' '
-step = 1
-while c!= 'q': 
+step = 0
+octava = 1
+while c!= 'l': 
     if kb.kbhit():
         c = kb.getch()
-        if c!= ' ' and c != 'q':
+        if c!= ' ' and c != 'l':
             numBloque = 0
+            step = 0
             bloque = data[ numBloque*CHUNK : numBloque*CHUNK+CHUNK ]  
             if c == 'z':
                 step = 1
+                octava = 1
             elif c == 'x':
                 step = 1.17
+                octava = 1
             elif c == 'c':
                 step = 1.32
+                octava = 1
             elif c == 'v':
                 step = 1.42
+                octava = 1
             elif c == 'b':
                 step = 1.58
+                octava = 1
             elif c == 'n':
                 step = 1.74
+                octava = 1
             elif c == 'm':
                 step = 1.91
+                octava = 1
+            elif c == 'q':
+                step = 1
+                octava = 2
+            elif c == 'w':
+                step = 1.17
+                octava = 2
+            elif c == 'e':
+                step = 1.32
+                octava = 2
+            elif c == 'r':
+                step = 1.42
+                octava = 2
+            elif c == 't':
+                step = 1.58
+                octava = 2
+            elif c == 'y':
+                step = 1.74
+                octava = 2
+            elif c == 'u':
+                octava = 2
+                step = 1.91    
             c = ' '
     
-    bloque = signal.resample(bloque, int(len(bloque)/step), axis= 0)
 
-    if len(bloque>0):
+    if len(bloque>0) and step != 0:
+        #print(int(len(bloque)/step))
         # nuevo bloque
         bloque = data[ numBloque*CHUNK : numBloque*CHUNK+CHUNK ]    
+        
+        if len(bloque>0):
+            bloque = signal.resample(bloque, int(len(bloque)/(step*octava)), axis= 0)
+            # pasamos al stream  haciendo conversion de tipo 
+            stream.write(bloque.astype(data.dtype).tobytes())
 
-        # pasamos al stream  haciendo conversion de tipo 
-        stream.write(bloque.astype(data.dtype).tobytes())
-
-        numBloque += 1
-        print('.',end='')
+            numBloque += 1
+            print('.',end='')
 
 kb.set_normal_term()        
 stream.stop_stream()
