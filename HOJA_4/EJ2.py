@@ -3,12 +3,24 @@
 import pyaudio, kbhit, os
 import numpy as np
 
+from enum import Enum
+
 p = pyaudio.PyAudio()
 
 RATE = 44100       # sampling rate, Hz, must be integer
-CHUNK = 16
+CHUNK = 64
 
+class WaveShape(Enum):
+    SIN = 0
+    SQUARE = 1
+    SAW = 2
 
+def oscSin(frec, chunk, samples):
+    return np.sin(2*np.pi*frec*chunk/RATE + samples)
+def oscCuad(frec, chunk, samples):
+    return 2*np.floor(oscSin(frec, chunk, samples))+1
+def oscSierra(frec, chunk, samples):
+    return 2*(chunk % (RATE/frec) * frec/RATE + samples)-1
 
 # [(fc,vol),(fm1,beta1),(fm2,beta2),...]
 def oscFM(frecs,frame):
@@ -18,7 +30,16 @@ def oscFM(frecs,frame):
     # recorremos en orden inverso
     
     for i in range(len(frecs)-1,-1,-1):
-        samples = frecs[i][1] * np.sin(2*np.pi*frecs[i][0]*chunk/RATE + samples)
+        #samples = frecs[i][1] * np.sin(2*np.pi*frecs[i][0]*chunk/RATE + samples)
+        if frecs[i][2] == WaveShape.SIN:
+            samples = frecs[i][1] * oscSin(frecs[i][0], chunk, samples)
+        elif frecs[i][2] == WaveShape.SQUARE:
+            samples = frecs[i][1] * 0.5 * oscCuad(frecs[i][0], chunk, samples)
+        elif frecs[i][2] == WaveShape.SAW:
+            samples = frecs[i][1] * 0.5 * oscSierra(frecs[i][0], chunk, samples)
+
+        # los 0.5 son porque si no satura mucho el sonido
+
     return samples
 
 stream = p.open(format=pyaudio.paFloat32,
@@ -32,7 +53,7 @@ c = ' '
 
 
 fc, fm = 220, 220
-frecs = [[fc,0.8],[fc+fm,0.5],[fc+2*fm,0.3],[fc+3*fm,0.2]]
+frecs = [[fc,0.8,WaveShape.SAW],[fc+fm,0.5,WaveShape.SIN],[fc+2*fm,0.3,WaveShape.SIN],[fc+3*fm,0.2,WaveShape.SIN]]
 
 frame = 0
 frecChanged = False
