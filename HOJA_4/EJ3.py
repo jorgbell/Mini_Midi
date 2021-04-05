@@ -20,25 +20,64 @@ class WaveShape(Enum):
     SAW = 2
 
 class OscWaveTable:
-    def __init__(self, frec, vol, size):
+    def __init__(self, frec, vol, size, frecs):
         self.frec = frec
         self.vol = vol
         self.size = size
+        self.frecs = frecs
         # un ciclo completo de seno en [0,2pi)
         t = np.linspace(0, 1, num=size)
         self.waveTable = np.sin(2 * np.pi * t)
         # arranca en 0
         self.fase = 0
+        self.fases = np.zeros(len(frecs))
         # paso en la wavetable en funcion de frec y RATE
         self.step = self.size/(RATE/self.frec)
+        self.steps = np.zeros(len(frecs))
+
+        for x in range(len(frecs)):
+            self.steps[x] = self.size/(RATE/self.frecs[x][0])
 
     def setFrec(self,frec): 
         self.frec = frec
         self.step = self.size/(RATE/self.frec)
 
+    def setFrecs(self, frecs):
+        self.frecs = frecs
+        for x in range(len(frecs)):
+            self.steps[x] = self.size/(RATE/self.frecs[x][0])
+
     def getFrec(self): 
         return self.frec    
 
+
+    def getChunkFM(self):
+        samples = np.zeros(CHUNK,dtype=np.float32)
+        chunk = np.zeros(CHUNK, dtype=np.float32)
+
+        for i in range(len(frecs)-1,-1,-1):
+            cont = 0
+            while cont < CHUNK:
+                self.fases[i] = (self.fases[i] + self.steps[i]) % self.size
+
+                # con truncamiento, sin redondeo
+                # samples[cont] = self.waveTable[int(self.fase)]
+
+                # con redondeo
+                #x = round(self.fase) % self.size
+                #samples[cont] = self.waveTable[x]
+                            
+                # con interpolacion lineal                                    
+                x0 = int(self.fases[i]) % self.size
+                x1 = (x0 + 1) % self.size
+                y0, y1 = self.waveTable[x0], self.waveTable[x1]            
+                chunk[cont] = y0 + (self.fases[i]-x0)*(y1-y0)/(x1-x0)
+
+                cont = cont+1
+
+            samples = self.frecs[i][1] * chunk
+
+        return self.vol * samples
 
     def getChunk(self):
         samples = np.zeros(CHUNK,dtype=np.float32)
@@ -61,9 +100,8 @@ class OscWaveTable:
             y0, y1 = self.waveTable[x0], self.waveTable[x1]            
             samples[cont] = y0 + (self.fase-x0)*(y1-y0)/(x1-x0)
 
-
             cont = cont+1
-        
+            
 
         return self.vol*samples
 
@@ -110,7 +148,7 @@ stream = p.open(format=pyaudio.paFloat32,
 fc, fm = 220, 220
 frecs = [[fc,0.8,WaveShape.SIN],[fc+fm,0.5,WaveShape.SIN],[fc+2*fm,0.3,WaveShape.SIN],[fc+3*fm,0.2,WaveShape.SIN]]
 
-osc = OscWaveTable(110,1,1024)
+osc = OscWaveTable(110,1,1024,frecs)
 
 frame = 0
 vol = 0
@@ -129,12 +167,14 @@ while True:
             for x in range(len(frecs)):
                 frecs[x][0] = fc + (fm * x)
     
+            osc.setFrecs(frecs)
+            #print("Freq:", fc, "Vol:", vol)
             #print(fc)
             #print(vol)
 
     #samples = oscFM(frecs,frame)
-
-    samples = osc.getChunk()
+    #samples = osc.getChunk()
+    samples = osc.getChunkFM()
 
     frame += CHUNK
 
