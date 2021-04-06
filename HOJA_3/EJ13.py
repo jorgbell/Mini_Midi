@@ -2,6 +2,7 @@ import pyaudio
 import wave
 import sys
 import kbhit
+import os
 from scipy.io import wavfile
 import numpy as np
 
@@ -11,7 +12,7 @@ if len(sys.argv) < 2:
     sys.exit(-1)
 '''
 #fs, data = wavfile.read(sys.argv[1])
-fs, data = wavfile.read('bakamitai.wav')
+fs, data = wavfile.read(os.path.dirname(__file__) + '\\bakamitai.wav')
 
 if data.dtype.name == 'int16':
     fmt = 2
