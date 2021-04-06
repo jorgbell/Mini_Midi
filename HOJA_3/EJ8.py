@@ -57,7 +57,6 @@ while c!= 'l':
         if c!= ' ' and c != 'l':
             numBloque = 0
             step = 0
-            bloque = data[ numBloque*CHUNK : numBloque*CHUNK+CHUNK ]  
             if c == 'z':
                 step = 1
                 octava = 1
