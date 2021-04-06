@@ -66,7 +66,8 @@ while True:
     frame += CHUNK
 
     if kb.kbhit():
-        os.system('clear')
+        #os.system('clear')
+        os.system('cls')
         c = kb.getch()
         
         if c =='z': break

@@ -11,6 +11,39 @@ p = pyaudio.PyAudio()
 RATE = 44100       # sampling rate, Hz, must be integer
 CHUNK = 1024
 
+def getNoteJusta(c):
+    step = -1
+    if c == 'z':
+        step = 0
+    elif c == 'x':
+        step = 1
+    elif c == 'c':
+        step = 2
+    elif c == 'v':
+        step = 3
+    elif c == 'b':
+        step = 4
+    elif c == 'n':
+        step = 5
+    elif c == 'm':
+        step = 6
+    elif c == 'q':
+        step = 7
+    elif c == 'w':
+        step = 8
+    elif c == 'e':
+        step = 9
+    elif c == 'r':
+        step = 10
+    elif c == 't':
+        step = 11
+    elif c == 'y':
+        step = 12
+    elif c == 'u':
+        step = 13 
+
+    return step
+
 '''
 
 Explanation
@@ -42,12 +75,25 @@ def synthWaveTable(wavetable, frame):
         t = (t+1) % len(wavetable)
     return samples
 
+# tabla con ruido
+size = CHUNK//2  # variar size
 
-stream = p.open(format=pyaudio.paFloat32,
+NUM_STREAMS = 14
+samples = []
+streams = np.empty([NUM_STREAMS],dtype=pyaudio.Stream)
+steps = [1, 9/8, 5/4, 4/3, 3/2, 5/3, 15/8]
+inUse = np.zeros(NUM_STREAMS)
+frames = np.zeros(NUM_STREAMS, dtype=np.int)
+
+for x in range(NUM_STREAMS):
+    stream = p.open(format=pyaudio.paFloat32,
                 channels=1,
                 rate=RATE,
                 output=True)
+    streams[x] = stream
 
+    waveTable = (2 * np.random.randint(0, 2, int(size / (steps[x % len(steps)] * ((x // 7)+1) )) ) - 1).astype(np.float32)
+    samples.append(karplus_strong(waveTable, 1*RATE))
 
 kb = kbhit.KBHit()
 c = ' '
@@ -57,14 +103,46 @@ frame = 0
 
 frec = 440
 
-
 # tabla con seno puro
 # waveTable = np.sin(2*np.pi*frec*np.arange(RATE/frec,dtype=np.float32)/RATE) 
 
-# tabla con ruido
-size = CHUNK//2  # variar size
 
+step = -1
+octava = -1
+first = False
 
+while c != 'l':
+    #os.system('clear')
+    os.system('cls')
+    if kb.kbhit():
+        step = -1
+        c = kb.getch()
+
+        step = getNoteJusta(c)
+
+        if step != -1:
+            first = True
+            inUse[step] = 1
+            frames[step] = 0
+
+    active = [i for i in range(len(inUse)) if inUse[i] != 0]
+
+    print(active)
+
+    for x in range(len(inUse)):
+        if inUse[x] == 1:
+            if frames[x] < len(samples[x]):
+                lastVal = frames[x] + int(CHUNK)
+                if lastVal > len(samples[x]):
+                    lastVal = len(samples[x])
+                sample = samples[x][frames[x] : lastVal]
+                streams[x].write(sample.astype(np.float32).tobytes()) 
+            
+                frames[x] += CHUNK
+            else: 
+                inUse[x] = 0
+
+"""
 # varias notas
 waveTable = (2 * np.random.randint(0, 2, size) - 1).astype(np.float32)
 stream.write(karplus_strong(waveTable,1*RATE).tobytes())
@@ -83,8 +161,9 @@ escala = [(2 * np.random.randint(0, 2, int(size/2**(k/12))) - 1).astype(np.float
 for i in [0,2,4,5,7,9,11,12]:
     stream.write(karplus_strong(escala[i], 0.3*RATE).tobytes()) 
 
-
-stream.stop_stream()
-stream.close()
+"""
+for i in range(len(streams)):
+    streams[i].stop_stream()
+    streams[i].close()
 
 p.terminate()

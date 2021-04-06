@@ -28,6 +28,10 @@ class OscWaveTable:
         # un ciclo completo de seno en [0,2pi)
         t = np.linspace(0, 1, num=size)
         self.waveTable = np.sin(2 * np.pi * t)
+        self.waveTables = []
+        for x in range(len(frecs)):
+            t = np.linspace(0, 1, num=size*frecs[x][0])
+            self.waveTables.append(np.sin(2 * np.pi * t))
         # arranca en 0
         self.fase = 0
         self.fases = np.zeros(len(frecs))
@@ -46,6 +50,8 @@ class OscWaveTable:
         self.frecs = frecs
         for x in range(len(frecs)):
             self.steps[x] = self.size/(RATE/self.frecs[x][0])
+            #t = np.linspace(0, 1, num=self.size*frecs[x][0])
+            #self.waveTables[x] = np.sin(2 * np.pi * t)
 
     def getFrec(self): 
         return self.frec    
@@ -58,7 +64,7 @@ class OscWaveTable:
         for i in range(len(frecs)-1,-1,-1):
             cont = 0
             while cont < CHUNK:
-                self.fases[i] = (self.fases[i] + self.steps[i]) % self.size
+                self.fases[i] = (self.fases[i] + self.steps[i] + chunk[cont]) % self.size
 
                 # con truncamiento, sin redondeo
                 # samples[cont] = self.waveTable[int(self.fase)]
@@ -67,15 +73,18 @@ class OscWaveTable:
                 #x = round(self.fase) % self.size
                 #samples[cont] = self.waveTable[x]
                             
-                # con interpolacion lineal                                    
+                # con interpolacion lineal 
+                #print(samples[cont])                                   
                 x0 = int(self.fases[i]) % self.size
-                x1 = (x0 + 1) % self.size
+                x1 = int(x0 + 1) % self.size
                 y0, y1 = self.waveTable[x0], self.waveTable[x1]            
                 chunk[cont] = y0 + (self.fases[i]-x0)*(y1-y0)/(x1-x0)
 
+                #if chunk[cont] < 0:
+                    #print("oh no")
                 cont = cont+1
 
-            samples = self.frecs[i][1] * chunk
+            samples = self.frecs[i][1] * chunk 
 
         return self.vol * samples
 
@@ -172,9 +181,10 @@ while True:
             #print(fc)
             #print(vol)
 
+    # Las 3 opciones para reproducir el audio del theremin
     #samples = oscFM(frecs,frame)
-    #samples = osc.getChunk()
-    samples = osc.getChunkFM()
+    samples = osc.getChunk()
+    #samples = osc.getChunkFM()
 
     frame += CHUNK
 

@@ -82,10 +82,10 @@ def getNoteTemperada(c):
         step = 7
         octava = 1
     elif c == 'n':
-        step = 8
+        step = 9
         octava = 1
     elif c == 'm':
-        step = 10
+        step = 11
         octava = 1
     elif c == 'q':
         step = 0
@@ -103,10 +103,10 @@ def getNoteTemperada(c):
         step = 7
         octava = 2
     elif c == 'y':
-        step = 8
+        step = 9
         octava = 2
     elif c == 'u':
-        step = 10   
+        step = 11   
         octava = 2
 
     if step >= 0:
@@ -172,9 +172,10 @@ first = False
 usingJusta = 1
 c = ' '
 while c != 'l':
+    #os.system('clear')
     if kb.kbhit():
         step = -1
-        os.system('clear')
+        os.system('cls')
         c = kb.getch()
 
         if c == 'k':

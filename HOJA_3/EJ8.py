@@ -61,44 +61,44 @@ while c!= 'l':
                 step = 1
                 octava = 1
             elif c == 'x':
-                step = 9/8
+                step = 1.12
                 octava = 1
             elif c == 'c':
-                step = 5/4
+                step = 1.19
                 octava = 1
             elif c == 'v':
-                step = 4/3
+                step = 1.33
                 octava = 1
             elif c == 'b':
-                step = 3/2
+                step = 1.5
                 octava = 1
             elif c == 'n':
-                step = 5/3
+                step = 1.59
                 octava = 1
             elif c == 'm':
-                step = 15/8
+                step = 1.78
                 octava = 1
             elif c == 'q':
                 step = 1
                 octava = 2
             elif c == 'w':
-                step = 9/8
+                step = 1.12
                 octava = 2
             elif c == 'e':
-                step = 5/4
+                step = 1.19
                 octava = 2
             elif c == 'r':
-                step = 4/3
+                step = 1.33
                 octava = 2
             elif c == 't':
-                step = 3/2
+                step = 1.5
                 octava = 2
             elif c == 'y':
-                step = 5/3
+                step = 1.59
                 octava = 2
             elif c == 'u':
+                step = 1.78   
                 octava = 2
-                step = 15/8    
             c = ' '
     
 
