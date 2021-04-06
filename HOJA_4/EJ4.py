@@ -82,10 +82,10 @@ def getNoteTemperada(c):
         step = 7
         octava = 1
     elif c == 'n':
-        step = 9
+        step = 8
         octava = 1
     elif c == 'm':
-        step = 11
+        step = 10
         octava = 1
     elif c == 'q':
         step = 0
@@ -154,7 +154,7 @@ kb = kbhit.KBHit()
 c = ' '
 
 ROOT_FREC = 440
-convC = 2/3
+convC = 3/5
 fc = ROOT_FREC
 #1 5/4 3/2
 frecs = [[fc,0.8],[fc*(5/4),0.6],[fc*(3/2),0.4]]
@@ -182,15 +182,21 @@ while c != 'l':
 
         if usingJusta:
             step, octava = getNoteJusta(c)
+            convC = 3/5
         else:
             step, octava = getNoteTemperada(c)
+            convC = 1/(2**(8/12))
         if step != -1:
             first = True
             frame = 0
             fc = ROOT_FREC * convC * step * octava
             frecs[0][0] = fc
-            frecs[1][0] = fc*(5/4)
-            frecs[2][0] = fc*(3/2)
+            if usingJusta:
+                frecs[1][0] = fc*(5/4)
+                frecs[2][0] = fc*(3/2)
+            else:
+                frecs[1][0] = fc*2**(3/12)
+                frecs[2][0] = fc*2**(7/12)
             print(fc)
 
     if frame<endFrame and first:
