@@ -64,7 +64,7 @@ class Sample:
             # con interpolacion lineal                                    
             x0 = int(self.fase) % self.size
             x1 = (x0 + 1) % self.size
-            y0, y1 = self.waveTable[x0], self.waveTable[x1]            
+            y0, y1 = self.waveTable[int(x0)], self.waveTable[int(x1)]            
             samples[cont] = y0 + (self.fase-x0)*(y1-y0)/(x1-x0)
 
 
@@ -83,7 +83,7 @@ stream = p.open(format=pyaudio.paFloat32,
 kb = kbhit.KBHit()
 c = ' '
 
-osc = Sample(440,1,"piano.wav", 0.5, 1.0)
+osc = Sample(440,1,"audio.wav", 0.5, 1.0)
 
 
 while True:
