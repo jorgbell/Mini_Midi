@@ -22,7 +22,7 @@ def oscChunk(vol, frec):
     return dataChunk
 
 # abrimos wav y recogemos frecMuestreo y array de datos
-SRATE, data = wavfile.read('piano.wav')
+SRATE, data = wavfile.read(os.path.dirname(__file__) + '\\' + 'piano.wav')
 
 
 # informacion de wav
@@ -47,6 +47,7 @@ stream = p.open(format=p.get_format_from_width(getWidthData(data)),
 # En data tenemos el wav completo, ahora procesamos por bloques (chunks)
 bloque = np.arange(CHUNK,dtype=data.dtype)
 numBloque = 0
+numMaxBloques = len(data)/CHUNK
 kb = kbhit.KBHit()
 c= ' '
 step = 0
@@ -102,7 +103,7 @@ while c!= 'l':
             c = ' '
     
 
-    if len(bloque>0) and step != 0:
+    if numBloque < numMaxBloques and step != 0:
         #print(int(len(bloque)/step))
         # nuevo bloque
         bloque = data[ numBloque*CHUNK : numBloque*CHUNK+CHUNK ]    

@@ -19,7 +19,7 @@ def setDelay(data, delayTime):
     return np.append(delay, data)
 
 # abrimos wav y recogemos frecMuestreo y array de datos
-SRATE, data = wavfile.read(os.path.dirname(__file__) + '\piano.wav')
+SRATE, data = wavfile.read(os.path.dirname(__file__) + '\\' + 'piano.wav')
 
 
 # informacion de wav

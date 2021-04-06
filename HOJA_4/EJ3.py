@@ -80,8 +80,6 @@ class OscWaveTable:
                 y0, y1 = self.waveTable[x0], self.waveTable[x1]            
                 chunk[cont] = y0 + (self.fases[i]-x0)*(y1-y0)/(x1-x0)
 
-                #if chunk[cont] < 0:
-                    #print("oh no")
                 cont = cont+1
 
             samples = self.frecs[i][1] * chunk 

@@ -2,6 +2,7 @@ import pyaudio
 import wave
 import sys
 import kbhit
+import os
 from scipy.io import wavfile
 import numpy as np
 
@@ -11,7 +12,7 @@ if len(sys.argv) < 2:
     sys.exit(-1)
 '''
 #fs, data = wavfile.read(sys.argv[1])
-fs, data = wavfile.read('bakamitai.wav')
+fs, data = wavfile.read(os.path.dirname(__file__) + '\\' + 'bakamitai.wav')
 
 if data.dtype.name == 'int16':
     fmt = 2
@@ -73,14 +74,20 @@ while c!= 'q': # and not(quit):
     stream.write(data2.astype((data.dtype)).tobytes())    
     if kb.kbhit():
         c = kb.getch()
-        print(c)
+        #os.system('clear')
+        os.system('cls')
         if c =='q': break
         elif c=='F': freq += 100
         elif c=='f': freq -= 100
         elif c=='b': filter = 'bp'
         elif c=='B': filter = ' '
         freq = min(fs/2,max(0,freq))
+        print("[F] frecuencia de corte +100")
+        print("[f] frecuencia de corte -100")
+        print("[b] filtro BP")
+        print("[B] desactivar filtro BP")
         print("Filtro: ", filter,"   Cut off frec: ",freq)
+        print(c)
 
 
     frame += 1

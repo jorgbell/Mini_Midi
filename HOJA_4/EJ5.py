@@ -111,6 +111,9 @@ step = -1
 octava = -1
 first = False
 
+print("Press l to exit")
+print("Active streams: []")
+
 while c != 'l':
     #os.system('clear')
     os.system('cls')
@@ -127,7 +130,8 @@ while c != 'l':
 
     active = [i for i in range(len(inUse)) if inUse[i] != 0]
 
-    print(active)
+    print("Press l to exit")
+    print("Active streams:",active)
 
     for x in range(len(inUse)):
         if inUse[x] == 1:

@@ -127,7 +127,7 @@ class Sample:
         self.stream.close()
 
 
-osc = Sample(1,"piano.wav", 0.25, 0.5)
+osc = Sample(1,os.path.dirname(__file__) + '\\' + "piano.wav", 0.25, 0.5)
 
 
 kb = kbhit.KBHit()
