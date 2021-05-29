@@ -1,0 +1,28 @@
+Cada barra son dos compases a 145 bpm.
+
+INTRO:
+Una intro en la que una guitarra toque E Maj 7 durante varios compases, y posteriormente
+entre la batería
+
+PROGRESIÓN PRINCIPAL:
+Es la misma repetición pero sustituimos los dos ultimos acordes, pasando al bridge
+E MAJ | C#7 | F#-7 Adim6 | E MAJ7
+I 		VI 	  II (II,III?) I
+E MAJ | C#7 | F#-7 G#7sus4 | C#- 
+I 		VI 	  II (II,III?)   VI
+
+
+BRIDGE:
+La idea del puente es dar vueltas sobre un par de acordes y jugar con modulaciones
+para acabar haciendo V y cayendo en el I para la estrofa principal
+
+F#dim | C#- | F#7 | B B9 B7
+II 		VI 	  II 	V
+
+ESTRIBILLO:
+
+E MAJ | Bbdim7 | AMaj7 A#7 | Emaj7 E7
+I		V		 IV	   IV    I
+					   I     V
+
+
