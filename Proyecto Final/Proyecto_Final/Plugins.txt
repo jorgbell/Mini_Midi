@@ -1,6 +1,36 @@
-Ample Bass Lite
-Ample Guitar Lite
-Spitfire Labs
-Spitfire BBC Orchestra
-Youlean Loudness Meter
-Gliss EQ
+Master :
+	Gliss EQ (Voxengo) -> (Not used!)
+	ReaComp (Cockos) -> (Not used!)
+	ReaEQ (Cockos)
+	ReaXcomp (Cockos)
+	JS - Master Limiter
+	Youlean Loudness Meter 2
+	JS - Goniometer
+
+E-Piano:
+	Komplete Kontrol (Native Instruments)
+	ReaEQ (Cockos)
+	
+Piano:
+	LABS (Spitfire Audio) - Soft Piano
+	ReaEQ (Cockos)
+	
+Bass:
+	Ample Bass P Lite II(Ample Sound)
+	ReaEQ (Cockos)
+	
+Drums:
+	Drumart SLD (ESL) -> (Not used!)
+	EZDrummer 2 (Toontrack)
+	
+Trumept:
+	LABS (Spitfire Audio) - Trumpet Fields
+	BBC: Symphony Orchestra (Spitfire Audio)
+	
+Synth:
+	Kontakt (Native Instruments GmbH)
+	ReaDeleay (Cockos)
+	ReaEQ (Cockos)
+
+Guitar: -> (Not used!)
+	Guitar M II Lite (Ample Sound) -> (Not used!)
